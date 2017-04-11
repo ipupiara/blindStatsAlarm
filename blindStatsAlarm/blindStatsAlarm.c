@@ -11,7 +11,10 @@
 #include <util/atomic.h>
 
 
-#define alarmSecs   30
+#define  ckdiv8
+
+#define alarmSecs   180
+//#define alarmSecs   20
 
 int8_t  tickCnt;
 int32_t  secsCnt;
@@ -32,7 +35,11 @@ void initBuzzerTimer()
 
 void startBuzzerTimer()
 {
+#ifdef ckdiv8
+	TCCR0B |=  (1<< CS00) ;   // prescaler = 1
+#else	
 	TCCR0B |=  (1<< CS01) ;    //  prescaler = 8
+#endif	
 }
 
 void stopBuzzerTimer()
@@ -80,13 +87,17 @@ void initHW()
 	tickCnt = 0;
 	secsCnt = 0;   
 	alarmOn = 0;
-	TCCR1 = 1 << CTC1;
+	TCCR1 = (1 << CTC1);
 	OCR1A = 0xF4;  // counter top value means approx   2 per sec
 	GTCCR = 0x00;
 	TIMSK  = 1 << OCIE1A;  //  interrupt needed 
 	TCNT1 = 0x00 ;
 
+#ifdef ckdiv8
+	TCCR1 |=  (1 << CS12) | (1 << CS13) ;      //   2048 prescaler... about 488 Hz at 8Mhz CLK
+#else
 	TCCR1 |=  (1 << CS10) |  (1 << CS11) | (1 << CS12) | (1 << CS13) ;      //   16384 prescaler... about 488 Hz at 8Mhz CLK
+#endif	
 	sei();	
 }
 

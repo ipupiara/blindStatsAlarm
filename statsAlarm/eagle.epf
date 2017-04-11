@@ -278,7 +278,7 @@ UsedLibrary="C:/Program Files (x86)/EAGLE-5.8.0/lbr/zilog.lbr"
 [Win_1]
 Type="Schematic Editor"
 Loc="66 66 665 465"
-State=1
+State=0
 Number=1
 File="blindStatsAlarmSchematic.sch"
 View="-284477 251044 1249597 908124"
